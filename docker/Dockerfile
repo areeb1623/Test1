@@ -17,6 +17,15 @@ RUN useradd -m -s /bin/bash student \
     && usermod -aG sudo student \
     && echo 'student ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/student
 
-RUN mkdir -p /run/sshd && ssh-keygen -A
+# Skapa mappar och dokumentfiler permanent för labben
+RUN mkdir -p /run/sshd /home/student/dokument && \
+    echo "Ekonomirapport 2026" > /home/student/dokument/ekonomi.txt && \
+    echo "Kundregister" > /home/student/dokument/kunder.txt && \
+    echo "Serverinformation" > /home/student/dokument/serverinfo.txt && \
+    echo "Projektplan 2026" > /home/student/dokument/projekt.txt && \
+    echo "Personallista" > /home/student/dokument/personal.txt && \
+    echo "Installationer" > /home/student/dokument/installationer.txt && \
+    chown -R student:student /home/student/dokument && \
+    ssh-keygen -A
 
 CMD ["/usr/sbin/sshd", "-D"]
