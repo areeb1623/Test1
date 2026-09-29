@@ -1,7 +1,5 @@
 FROM ubuntu:24.04
 
-ENV DEBIAN_FRONTEND=noninteractive
-
 RUN apt-get update && apt-get install -y \
     openssh-server \
     sudo \
@@ -11,20 +9,13 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     nano \
     vim \
-    dnsutils \
-    traceroute \
-    procps \
-    && rm -rf /var/lib/apt/lists/*
+    dnsutils
 
 RUN useradd -m -s /bin/bash student \
     && echo 'student:student' | chpasswd \
     && usermod -aG sudo student \
     && echo 'student ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/student
 
-RUN mkdir -p /run/sshd \
-    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config \
-    && sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-EXPOSE 22
+RUN mkdir -p /run/sshd && ssh-keygen -A
 
 CMD ["/usr/sbin/sshd", "-D"]
