@@ -2,6 +2,7 @@ FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y \
     openssh-server \
+    rsync \
     sudo \
     iproute2 \
     iputils-ping \
